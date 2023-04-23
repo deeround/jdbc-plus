@@ -56,6 +56,14 @@ public class JdbcPlusConfig {
             public String getTenantIdColumn() {
                 return "tenant_id";
             }
+
+            /**
+             * 根据表名判断是否忽略拼接多租户条件
+             */
+            @Override
+            public boolean ignoreTable(String tableName) {
+                return TenantLineHandler.super.ignoreTable(tableName);
+            }
         });
     }
 }
@@ -92,6 +100,14 @@ public class JdbcPlusConfig {
             @Override
             public String getTenantIdColumn() {
                 return "tenant_id";
+            }
+
+            /**
+             * 根据表名判断是否忽略拼接多租户条件
+             */
+            @Override
+            public boolean ignoreTable(String tableName) {
+                return TenantLineHandler.super.ignoreTable(tableName);
             }
         });
     }
