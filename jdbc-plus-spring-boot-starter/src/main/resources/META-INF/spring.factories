@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ com.github.deeroud.jdbc.plus.spring.boot.autoconfigure.JdbcPlusAutoConfiguration
