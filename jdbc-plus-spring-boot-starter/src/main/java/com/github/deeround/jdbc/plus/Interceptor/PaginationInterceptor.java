@@ -25,9 +25,13 @@ public class PaginationInterceptor implements IInterceptor {
 
     @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
+        Page<Object> localPage = PageHelper.getLocalPage();
+        if (localPage == null) {
+            return;
+        }
+
         try {
             Dialect dialect = PageHelper.getDialect(jdbcTemplate);
-            Page<Object> localPage = PageHelper.getLocalPage();
             String sql = methodInfo.getSql();
 
             //查询汇总
@@ -48,8 +52,12 @@ public class PaginationInterceptor implements IInterceptor {
 
     @Override
     public Object beforeFinish(Object result, final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
+        Page<Object> localPage = PageHelper.getLocalPage();
+        if (localPage == null) {
+            return result;
+        }
+
         try {
-            Page<Object> localPage = PageHelper.getLocalPage();
             for (Object o : (List<?>) result) {
                 localPage.add(o);
             }

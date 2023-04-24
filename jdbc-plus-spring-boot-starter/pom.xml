@@ -39,11 +39,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.jsqlparser/jsqlparser -->
         <dependency>
             <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
-            <version>4.6</version>
+            <version>4.3</version>
         </dependency>
 
     </dependencies>

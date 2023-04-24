@@ -33,6 +33,13 @@ public class JdbcTemplateTestService {
         return page;
     }
 
+    public PageInfo<Map<String, Object>> page3() {
+        PageHelper.startPage(3, 2);
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");//最终执行SQL：select * from test_user LIMIT 4，2
+        PageInfo<Map<String, Object>> page = new PageInfo<>(list);//PageInfo对象包含了分页信息（总行数等）
+        return page;
+    }
+
 
     public void insert() {
         this.jdbcTemplate.update("insert into test_user(id,name) values('1','wangwu')");
@@ -40,8 +47,8 @@ public class JdbcTemplateTestService {
     }
 
     public void delete() {
-        this.jdbcTemplate.update("delete from test_user");
-        //最终执行SQL：delete from test_user where tenant_id='test_tenant_1'
+        this.jdbcTemplate.update("delete from test_user where id='1'");
+        //最终执行SQL：delete from test_user where id='1' and tenant_id='test_tenant_1'
     }
 
     public void update() {
