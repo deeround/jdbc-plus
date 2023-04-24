@@ -7,7 +7,7 @@ import com.github.deeround.jdbc.plus.method.MethodInvocationInfo;
 import com.github.deeround.jdbc.plus.method.MethodType;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author wanghao 913351190@qq.com
@@ -58,8 +58,8 @@ public class PaginationInterceptor implements IInterceptor {
         }
 
         try {
-            for (Object o : (List<?>) result) {
-                localPage.add(o);
+            if (result != null) {
+                localPage.addAll((Collection<?>) result);
             }
             return localPage;
         } finally {

@@ -27,7 +27,7 @@ package com.github.deeround.jdbc.plus.Interceptor.pagination.dialect;
 /**
  * @author liuzh
  */
-public class HsqldbDialect extends AbstractDialect {
+public class PostgreSqlDialect extends AbstractDialect {
 
     @Override
     public String getPageSql(String sql, int pageNum, int pageSize) {

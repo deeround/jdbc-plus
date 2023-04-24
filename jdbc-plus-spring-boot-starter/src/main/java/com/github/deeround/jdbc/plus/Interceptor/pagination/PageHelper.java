@@ -24,9 +24,9 @@
 
 package com.github.deeround.jdbc.plus.Interceptor.pagination;
 
-import com.github.deeround.jdbc.plus.Interceptor.pagination.dialect.HsqldbDialect;
 import com.github.deeround.jdbc.plus.Interceptor.pagination.dialect.MySqlDialect;
 import com.github.deeround.jdbc.plus.Interceptor.pagination.dialect.OracleDialect;
+import com.github.deeround.jdbc.plus.Interceptor.pagination.dialect.PostgreSqlDialect;
 import com.github.deeround.jdbc.plus.Interceptor.pagination.dialect.SqlServerDialect;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -43,9 +43,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author liuzh
  */
 public abstract class PageHelper {
-    private static final ThreadLocal<Page> LOCAL_PAGE = new ThreadLocal<Page>();
-    private static boolean DEFAULT_COUNT = true;
-    private static ReentrantLock lock = new ReentrantLock();
+    private static final ThreadLocal<Page> LOCAL_PAGE = ThreadLocal.withInitial(() -> null);
+    private static final boolean DEFAULT_COUNT = true;
+    private static final ReentrantLock lock = new ReentrantLock();
 
     /**
      * 设置 Page 参数
@@ -121,9 +121,9 @@ public abstract class PageHelper {
 
     static {
 
-        registerDialectAlias("hsqldb", HsqldbDialect.class);
-        registerDialectAlias("h2", HsqldbDialect.class);
-        registerDialectAlias("postgresql", HsqldbDialect.class);
+        registerDialectAlias("hsqldb", PostgreSqlDialect.class);
+        registerDialectAlias("h2", PostgreSqlDialect.class);
+        registerDialectAlias("postgresql", PostgreSqlDialect.class);
 
         registerDialectAlias("mysql", MySqlDialect.class);
         registerDialectAlias("mariadb", MySqlDialect.class);

@@ -31,7 +31,7 @@ public class SqlServerDialect extends AbstractDialect {
 
     @Override
     public String getPageSql(String sql, int pageNum, int pageSize) {
-        return "SELECT * FROM (SELECT PG_TB.*,ROW_NUMBER() OVER( ORDER BY 1) PG_ROWNUM FROM ( " + sql + " ) PG_TB) PG_TB1 WHERE PG_ROWNUM <= " + (pageNum * pageSize) + " AND PG_ROWNUM > " + ((pageNum - 1) * pageSize) + " ";
+        return "SELECT * FROM (SELECT PG_TB.*,ROW_NUMBER() OVER( ORDER BY RAND()) PG_ROWNUM FROM ( " + sql + " ) PG_TB) PG_TB1 WHERE PG_ROWNUM <= " + (pageNum * pageSize) + " AND PG_ROWNUM > " + ((pageNum - 1) * pageSize) + " ";
     }
 
 }
