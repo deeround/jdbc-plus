@@ -64,7 +64,11 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
                     if (methodInfo.getSql() != null && methodInfo.getSql().length() > 0 && methodInfo.isFirstParameterIsSql()) {
                         //将SQL写入到第一个入参
                         if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
-                            methodInfo.getArgs()[0] = methodInfo.getSql();
+                            if (methodInfo.isFirstParameterIsBatchSql()) {
+                                methodInfo.getArgs()[0] = methodInfo.getBatchSql();
+                            } else {
+                                methodInfo.getArgs()[0] = methodInfo.getSql();
+                            }
                         }
                     }
                     if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
@@ -94,7 +98,8 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
 
         //逻辑处理
         if (this.interceptors != null && this.interceptors.size() > 0) {
-            for (IInterceptor interceptor : this.interceptors) {
+            for (int i = this.interceptors.size() - 1; i >= 0; i--) {
+                IInterceptor interceptor = this.interceptors.get(i);
                 if (interceptor.supportMethod(methodInfo)) {
                     log.debug("==========" + interceptor.getClass().getName() + " interceptor finish start==========");
                     result = interceptor.beforeFinish(result, methodInfo, jdbcTemplate);

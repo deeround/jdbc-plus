@@ -18,6 +18,7 @@ package com.github.deeround.jdbc.plus.Interceptor;
 
 import com.github.deeround.jdbc.plus.handler.TenantLineHandler;
 import com.github.deeround.jdbc.plus.method.MethodInvocationInfo;
+import com.github.deeround.jdbc.plus.method.MethodType;
 import com.github.deeround.jdbc.plus.util.CollectionUtils;
 import com.github.deeround.jdbc.plus.util.ExceptionUtils;
 import com.github.deeround.jdbc.plus.util.StringPool;
@@ -50,8 +51,18 @@ public class TenantLineInterceptor extends BaseMultiTableInterceptor implements 
     }
 
     @Override
+    public boolean supportMethod(MethodInvocationInfo methodInfo) {
+        if (methodInfo.isFirstParameterIsSql() && (MethodType.UPDATE.equals(methodInfo.getType()) || MethodType.QUERY.equals(methodInfo.getType()))) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
-        methodInfo.setSql(this.parserMulti(methodInfo.getSql(), null));
+        for (int i = 0; i < methodInfo.getBatchSql().length; i++) {
+            methodInfo.getBatchSql()[i] = this.parserMulti(methodInfo.getBatchSql()[i], null);
+        }
     }
 
     @Override

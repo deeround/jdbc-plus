@@ -61,5 +61,20 @@ public class JdbcTemplateTestService {
         //最终执行SQL：select * from test_user where tenant_id='test_tenant_1'
     }
 
+    public void createTable() {
+        String sql = "CREATE TABLE test_user\n" +
+                "(\n" +
+                "    name      varchar(100) DEFAULT NULL,\n" +
+                "    tenant_id varchar(32)  DEFAULT NULL,\n" +
+                "    id        varchar(32) NOT NULL,\n" +
+                "    PRIMARY KEY (id)\n" +
+                ")";
+        this.jdbcTemplate.execute(sql);
+    }
+
+    public void batchUpdate() {
+        this.jdbcTemplate.batchUpdate("insert into test_user(id,name) values('1','wangwu')", "insert into test_user(id,name) values('2','wangwu2')");
+    }
+
 
 }

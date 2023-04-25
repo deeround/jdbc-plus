@@ -21,6 +21,8 @@ public class MethodInfo {
 
     protected boolean firstParameterIsSql;
 
+    protected boolean firstParameterIsBatchSql;
+
     protected boolean returnIsList;
 
     public MethodInfo(Method method) {
@@ -35,7 +37,12 @@ public class MethodInfo {
 
         if (this.parameterTypes != null && this.parameterTypes.length > 0) {
             if (this.parameterTypes[0] != null) {
-                this.firstParameterIsSql = String.class.isAssignableFrom(this.parameterTypes[0]);
+                if (String.class.isAssignableFrom(this.parameterTypes[0])) {
+                    this.firstParameterIsSql = true;
+                } else if (this.name.equals("batchUpdate") && this.parameterTypes.length == 1 && this.parameterTypes[0].isArray()) {
+                    this.firstParameterIsSql = true;
+                    this.firstParameterIsBatchSql = true;
+                }
             }
         }
 
@@ -46,14 +53,12 @@ public class MethodInfo {
 
     protected MethodType getMethodType() {
         if (this.name != null || this.name.length() > 0) {
-            if (this.name.equals("batchUpdate")) {
-                return MethodType.BATCH_UPDATE;
-            } else if (this.name.equals("execute")) {
-                return MethodType.EXECUTE;
+            if (this.name.equals("batchUpdate") || this.name.equals("update")) {
+                return MethodType.UPDATE;
             } else if (this.name.equals("query") || this.name.equals("queryForList") || this.name.equals("queryForMap") || this.name.equals("queryForObject") || this.name.equals("queryForRowSet") || this.name.equals("queryForStream")) {
                 return MethodType.QUERY;
-            } else if (this.name.equals("update")) {
-                return MethodType.UPDATE;
+            } else if (this.name.equals("execute")) {
+                return MethodType.EXECUTE;
             }
         }
         return MethodType.UNKNOWN;
@@ -82,6 +87,10 @@ public class MethodInfo {
 
     public boolean isFirstParameterIsSql() {
         return this.firstParameterIsSql;
+    }
+
+    public boolean isFirstParameterIsBatchSql() {
+        return this.firstParameterIsBatchSql;
     }
 
     public boolean isReturnIsList() {

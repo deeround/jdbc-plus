@@ -16,7 +16,6 @@
 package com.github.deeround.jdbc.plus.Interceptor;
 
 import com.github.deeround.jdbc.plus.method.MethodInvocationInfo;
-import com.github.deeround.jdbc.plus.method.MethodType;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -26,10 +25,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public interface IInterceptor {
 
     default boolean supportMethod(final MethodInvocationInfo methodInfo) {
-        if (methodInfo.isFirstParameterIsSql() && !MethodType.UNKNOWN.equals(methodInfo.getType())) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     default void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {

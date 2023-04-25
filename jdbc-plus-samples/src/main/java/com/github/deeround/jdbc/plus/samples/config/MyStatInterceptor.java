@@ -30,9 +30,11 @@ public class MyStatInterceptor implements IInterceptor {
      */
     @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
-        log.info("原始SQL：{}", methodInfo.getSql());
-        log.info("入参：{}", Arrays.toString(methodInfo.getArgs()));
         log.info("执行SQL开始时间：{}", LocalDateTime.now());
+        log.info("原始SQL：{}", Arrays.toString(methodInfo.getBatchSql()));
+        log.info("调用方法名称：{}", methodInfo.getName());
+        log.info("调用方法入参：{}", Arrays.toString(methodInfo.getArgs()));
+
         methodInfo.getUserAttributes().put("startTime", LocalDateTime.now());
     }
 

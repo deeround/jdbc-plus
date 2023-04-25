@@ -48,4 +48,14 @@ public class Tests {
         this.jdbcTemplateTestService.query();
     }
 
+    @Test
+    void testCreateTable() {
+        this.jdbcTemplateTestService.createTable();
+    }
+
+    @Test
+    void testBatchUpdate() {
+        this.jdbcTemplateTestService.batchUpdate();
+    }
+
 }

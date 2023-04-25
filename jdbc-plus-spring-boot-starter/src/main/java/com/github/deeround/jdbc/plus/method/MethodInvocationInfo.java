@@ -12,6 +12,8 @@ public class MethodInvocationInfo extends MethodInfo {
 
     private String sql;
 
+    private String[] batchSql;
+
     private Object[] args;
 
     private Map<String, Object> userAttributes = new HashMap<>(0);
@@ -20,28 +22,49 @@ public class MethodInvocationInfo extends MethodInfo {
         super(method);
         this.args = args;
         if (this.isFirstParameterIsSql()) {
-            this.sql = args[0].toString();
+            if (this.isFirstParameterIsBatchSql()) {
+                this.batchSql = (String[]) args[0];
+            } else {
+                this.batchSql = new String[]{args[0].toString()};
+            }
         }
     }
 
     public String getSql() {
-        return this.sql;
+        if (this.batchSql == null || this.batchSql.length == 0) {
+            return null;
+        } else {
+            return this.batchSql[0];
+        }
     }
 
-    public void setSql(String sql) {
-        this.sql = sql;
+    public String[] getBatchSql() {
+        return this.batchSql;
     }
 
     public Object[] getArgs() {
         return this.args;
     }
 
-    public void setArgs(Object[] args) {
-        this.args = args;
-    }
-
     public Map<String, Object> getUserAttributes() {
         return this.userAttributes;
+    }
+
+
+    public void setSql(String sql) {
+        if (this.batchSql == null || this.batchSql.length == 0) {
+            this.batchSql = new String[]{sql};
+        } else {
+            this.batchSql[0] = sql;
+        }
+    }
+
+    public void setBatchSql(String[] batchSql) {
+        this.batchSql = batchSql;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
     }
 
     public void setUserAttributes(Map<String, Object> userAttributes) {
