@@ -57,7 +57,7 @@ public class JdbcTemplateTestService {
     }
 
     public List<Map<String, Object>> query() {
-        return this.jdbcTemplate.queryForList("select * from test_user");
+        return this.jdbcTemplate.queryForList("select * from test_user where name=?", "3");
         //最终执行SQL：select * from test_user where tenant_id='test_tenant_1'
     }
 

@@ -72,10 +72,7 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
                         }
                     }
                     if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
-                        args = methodInfo.getArgs();
-                        for (Object arg : args) {
-                            methodInvocation.setArguments(arg);
-                        }
+                        methodInvocation.setArguments(methodInfo.getArgs());
                     }
                     log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare end============");
                 } else {
