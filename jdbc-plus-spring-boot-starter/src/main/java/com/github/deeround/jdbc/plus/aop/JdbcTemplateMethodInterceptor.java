@@ -60,18 +60,18 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
                 if (interceptor.supportMethod(methodInfo)) {
                     log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare start==========");
                     interceptor.beforePrepare(methodInfo, jdbcTemplate);
-                    //将入参回写（SQL语句和入参）
-                    if (methodInfo.getSql() != null && methodInfo.getSql().length() > 0 && methodInfo.isFirstParameterIsSql()) {
+
+                    //插件允许修改原始入参，所以这里将入参回写
+                    if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
                         //将SQL写入到第一个入参
-                        if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
+                        if (methodInfo.getSql() != null && methodInfo.getSql().length() > 0 && methodInfo.isFirstParameterIsSql()) {
                             if (methodInfo.isFirstParameterIsBatchSql()) {
                                 methodInfo.getArgs()[0] = methodInfo.getBatchSql();
                             } else {
                                 methodInfo.getArgs()[0] = methodInfo.getSql();
                             }
                         }
-                    }
-                    if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
+                        //将参数回写
                         methodInvocation.setArguments(methodInfo.getArgs());
                     }
                     log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare end============");
@@ -83,7 +83,7 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
 
 
         log.debug("==========finish args start==========");
-        for (Object arg : args) {
+        for (Object arg : methodInfo.getArgs()) {
             log.debug("{}", arg);
         }
         log.debug("==========finish args end============");

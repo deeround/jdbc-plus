@@ -70,4 +70,18 @@ public class MethodInvocationInfo extends MethodInfo {
     public void setUserAttributes(Map<String, Object> userAttributes) {
         this.userAttributes = userAttributes;
     }
+
+
+    public void putUserAttribute(String key, Object value) {
+        if (this.getUserAttributes() != null) {
+            this.getUserAttributes().put(key, value);
+        }
+    }
+
+    public Object getUserAttribute(String key) {
+        if (this.getUserAttributes() != null) {
+            return this.getUserAttributes().get(key);
+        }
+        return null;
+    }
 }

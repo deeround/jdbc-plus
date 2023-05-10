@@ -35,7 +35,7 @@ public class MyStatInterceptor implements IInterceptor {
         log.info("调用方法名称：{}", methodInfo.getName());
         log.info("调用方法入参：{}", Arrays.toString(methodInfo.getArgs()));
 
-        methodInfo.getUserAttributes().put("startTime", LocalDateTime.now());
+        methodInfo.putUserAttribute("startTime", LocalDateTime.now());
     }
 
     /**
@@ -47,7 +47,7 @@ public class MyStatInterceptor implements IInterceptor {
     @Override
     public Object beforeFinish(Object result, final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
         log.info("执行SQL结束时间：{}", LocalDateTime.now());
-        LocalDateTime startTime = (LocalDateTime) methodInfo.getUserAttributes().get("startTime");
+        LocalDateTime startTime = (LocalDateTime) methodInfo.getUserAttribute("startTime");
         log.info("执行SQL耗时：{}毫秒", Duration.between(startTime, LocalDateTime.now()).toMillis());
         return result;
     }
