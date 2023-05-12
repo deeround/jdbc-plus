@@ -57,6 +57,12 @@
             <artifactId>sqljdbc4</artifactId>
             <version>4.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.0</version>
+        </dependency>
     </dependencies>
 
 </project>
