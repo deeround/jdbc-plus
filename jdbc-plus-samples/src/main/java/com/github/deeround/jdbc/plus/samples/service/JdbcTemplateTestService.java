@@ -76,5 +76,9 @@ public class JdbcTemplateTestService {
         this.jdbcTemplate.batchUpdate("insert into test_user(id,name) values('1','wangwu')", "insert into test_user(id,name) values('2','wangwu2')");
     }
 
+    public List<Map<String, Object>> getListByCondition(String name) {
+        return this.jdbcTemplate.queryForList("select * from test_user where name=?", name);
+    }
+
 
 }

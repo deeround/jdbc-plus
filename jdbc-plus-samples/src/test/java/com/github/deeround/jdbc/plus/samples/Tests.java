@@ -70,7 +70,7 @@ public class Tests {
     }
 
     /**
-     * 分页查询：jdbc-plus和mybatis-plus查询使用对比
+     * 普通查询：jdbc-plus和mybatis-plus查询使用对比
      */
     @Test
     void testTenantQuery() {
@@ -88,6 +88,19 @@ public class Tests {
     @Test
     void testBatchUpdate() {
         this.jdbcTemplateTestService.batchUpdate();
+    }
+
+
+    /**
+     * 条件查询：jdbc-plus和mybatis-plus查询使用对比
+     * xml中编写条件查询语句
+     */
+    @Test
+    void testQueryByCondition() {
+        List<Map<String, Object>> list1 = this.jdbcTemplateTestService.getListByCondition("3");
+        List<TestUser> list2 = this.testUserService.getListByCondition("3");
+        System.out.println(list1);
+        System.out.println(list2);
     }
 
 }
