@@ -1,40 +1,24 @@
-#  🚀 jdbc-plus简介
+# 🚀 jdbc-plus简介
 
- 🚀 jdbc-plus是一款基于JdbcTemplate增强工具包， 基于JdbcTemplate已实现分页、多租户、动态表名等插件，可自定义扩展插件，可与mybatis、mybatis-plus等混合使用。项目地址：https://github.com/deeround/jdbc-plus
+🚀 jdbc-plus是一款基于JdbcTemplate增强工具包，基于JdbcTemplate已实现分页、多租户、动态表名等插件，可自定义扩展插件，可与mybatis、mybatis-plus等混合使用。项目地址：https://github.com/deeround/jdbc-plus
 
-
-
-##  🍅  **特性**
-
-
+## 🍅  **特性**
 
 - 使用简单，对代码入侵很小，可与mybatis、mybatis-plus等混合使用。
 - 可自定义任意扩展插件
 - 免费开源，可任意使用修改代码
 - 是对ORM框架的增强不做任何改变，当需要动态执行SQL不是很方面使用ORM框架执行SQL时，jdbc-plus就能发挥作用
 
-
-
-
-
-##  🍆 **插件（持续扩展中）**
-
-
+## 🍆 **插件（持续扩展中）**
 
 已内置以下插件，开箱即用，还可以自行扩展插件，扩展插件方法十分简单。
 
 - **分页插件**：与PageHelper使用方法一致，还可以注册不支持的数据库
 - **多租户插件**：与mybatis-plus多租户插件使用方法一致，理论上与mybatis-plus多租户插件支持度一样
 - **动态表名插件**：与mybatis-plus动态表名插件使用方法一致
-- **更多插件**：持续关注jdbc-plus仓库：https://github.com/deeround/jdbc-plus，仓库包含所有插件源代码以及使用示例
-
-
-
-
+- **更多插件**：持续关注[jdbc-plus](https://github.com/baomidou/mybatis-plus)仓库，仓库包含所有插件源代码以及使用示例
 
 # 快速开始
-
-
 
 1. 引入jdbc-plus-spring-boot-starter
 
@@ -159,13 +143,7 @@ public class JdbcPlusConfig {
     }
 ~~~
 
-
-
-
-
 # 多租户插件
-
-
 
 1. 注入多租户插件
 
@@ -229,11 +207,7 @@ public class JdbcPlusConfig {
     }
 ~~~
 
-
-
 # 分页插件
-
-
 
 1. 注入分页插件
 
@@ -274,8 +248,6 @@ public class JdbcPlusConfig {
 
 当插件不支持的数据库分页，可以通过`PageHelper.registerDialectAlias(String alias, Class clazz) `注册一个自己分页实现类即可，也可以覆盖已支持的数据库分页。
 
-
-
 # 动态表名插件
 
 1. 注入分页插件
@@ -308,15 +280,9 @@ public class JdbcPlusConfig {
     }
 ~~~
 
-
-
 # 自定义插件
 
-
-
 示例：写一个打印SQL语句、执行参数、以及执行SQL耗时的监控插件。
-
-
 
 1. 编写MyStatInterceptor插件
 
@@ -386,15 +352,9 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL结束时间：2023-04-23T16
 c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 ~~~
 
-
-
 # ★ 鸣谢 ★
 
-
-
 欢迎各路好汉一起来参与完善 [jdbc-plus](https://github.com/baomidou/mybatis-plus)，感兴趣的可以在github点个 ⭐ ，有任何问题和建议欢迎提交 Issue ！
-
-
 
 https://github.com/baomidou/mybatis-plus
 

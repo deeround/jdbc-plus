@@ -82,7 +82,7 @@ public class JdbcPlusConfig {
     }
 
     /**
-     * 自定义插件注入，注入位置按实际情况
+     * MyStatInterceptor是自定义扩展的SQL监控插件（注入位置按实际情况）
      */
     @Bean
     @Order(0)
