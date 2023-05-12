@@ -101,7 +101,6 @@ public class Tests {
 
     /**
      * 条件查询：jdbc-plus和mybatis-plus查询使用对比
-     * xml中编写条件查询语句
      */
     @Test
     void testQueryByConditionWithMp() {

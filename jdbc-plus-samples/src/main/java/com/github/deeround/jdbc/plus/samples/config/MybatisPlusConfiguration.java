@@ -2,6 +2,7 @@ package com.github.deeround.jdbc.plus.samples.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
@@ -9,6 +10,8 @@ import net.sf.jsqlparser.expression.StringValue;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.time.LocalDateTime;
 
 /**
  * @author wanghao 913351190@qq.com
@@ -20,7 +23,10 @@ public class MybatisPlusConfiguration {
 
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
+
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
+        //多租户插件
         interceptor.addInnerInterceptor(new TenantLineInnerInterceptor(new TenantLineHandler() {
             /**
              * 当前租户ID
@@ -47,7 +53,23 @@ public class MybatisPlusConfiguration {
                 return false;
             }
         }));
+
+
+        //动态表名插件
+        DynamicTableNameInnerInterceptor dynamicTableNameInnerInterceptor = new DynamicTableNameInnerInterceptor();
+        dynamicTableNameInnerInterceptor.setTableNameHandler((sql, tableName) -> {
+            if ("test_log".equals(tableName)) {
+                return tableName + "_" + LocalDateTime.now().getYear();
+            }
+            return tableName;
+        });
+        interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor);
+
+
+        //分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+
+
         return interceptor;
     }
 

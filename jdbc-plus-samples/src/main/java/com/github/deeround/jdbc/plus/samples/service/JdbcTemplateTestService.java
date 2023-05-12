@@ -80,5 +80,8 @@ public class JdbcTemplateTestService {
         return this.jdbcTemplate.queryForList("select * from test_user where name=?", name);
     }
 
+    public List<Map<String, Object>> getTestLogList() {
+        return this.jdbcTemplate.queryForList("select * from test_log");
+    }
 
 }

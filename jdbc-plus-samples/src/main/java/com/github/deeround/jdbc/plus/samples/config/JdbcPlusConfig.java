@@ -1,14 +1,18 @@
 package com.github.deeround.jdbc.plus.samples.config;
 
+import com.github.deeround.jdbc.plus.Interceptor.DynamicTableNameInterceptor;
 import com.github.deeround.jdbc.plus.Interceptor.IInterceptor;
 import com.github.deeround.jdbc.plus.Interceptor.PaginationInterceptor;
 import com.github.deeround.jdbc.plus.Interceptor.TenantLineInterceptor;
+import com.github.deeround.jdbc.plus.handler.TableNameHandler;
 import com.github.deeround.jdbc.plus.handler.TenantLineHandler;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+
+import java.time.LocalDateTime;
 
 /**
  * @author wanghao 913351190@qq.com
@@ -27,7 +31,7 @@ public class JdbcPlusConfig {
     }
 
     /**
-     * TenantLineHandler是内置的多租户插件插件
+     * TenantLineInterceptor是内置的多租户插件
      */
     @Bean
     @Order(1)
@@ -56,6 +60,23 @@ public class JdbcPlusConfig {
             @Override
             public boolean ignoreTable(String tableName) {
                 return TenantLineHandler.super.ignoreTable(tableName);
+            }
+        });
+    }
+
+    /**
+     * DynamicTableNameInterceptor是内置的动态表名插件
+     */
+    @Bean
+    @Order(2)
+    public IInterceptor dynamicTableNameInterceptor() {
+        return new DynamicTableNameInterceptor(new TableNameHandler() {
+            @Override
+            public String dynamicTableName(String sql, String tableName) {
+                if ("test_log".equals(tableName)) {
+                    return tableName + "_" + LocalDateTime.now().getYear();
+                }
+                return tableName;
             }
         });
     }
