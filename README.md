@@ -1,16 +1,34 @@
 #  🚀 jdbc-plus简介
 
- 🚀 jdbc-plus是一款基于JdbcTemplate增强工具包， 基于JdbcTemplate已实现分页、多租户等插件，可自定义扩展插件。项目地址： https://github.com/deeround/jdbc-plus
+ 🚀 jdbc-plus是一款基于JdbcTemplate增强工具包， 基于JdbcTemplate已实现分页、多租户、动态表名等插件，可自定义扩展插件，可与mybatis、mybatis-plus等混合使用。项目地址：https://github.com/deeround/jdbc-plus
 
 
 
-**特性：**
+##  🍅  **特性**
 
-- 使用简单，对代码入侵很小
+
+
+- 使用简单，对代码入侵很小，可与mybatis、mybatis-plus等混合使用。
 - 可自定义任意扩展插件
-- 多租户参考mybatis-plus多租户的实现原理，理论上与mybatis-plus多租户插件支持度一样
-- 分页参考PageHelper的实现原理，使用简单，对代码入侵较小，还可以注册不支持的数据库
 - 免费开源，可任意使用修改代码
+- 是对ORM框架的增强不做任何改变，当需要动态执行SQL不是很方面使用ORM框架执行SQL时，jdbc-plus就能发挥作用
+
+
+
+
+
+##  🍆 **插件（持续扩展中）**
+
+
+
+已内置以下插件，开箱即用，还可以自行扩展插件，扩展插件方法十分简单。
+
+- **分页插件**：与PageHelper使用方法一致，还可以注册不支持的数据库
+- **多租户插件**：与mybatis-plus多租户插件使用方法一致，理论上与mybatis-plus多租户插件支持度一样
+- **动态表名插件**：与mybatis-plus动态表名插件使用方法一致
+- **更多插件**：持续关注jdbc-plus仓库：https://github.com/deeround/jdbc-plus，仓库包含所有插件源代码以及使用示例
+
+
 
 
 
@@ -28,23 +46,14 @@
 </dependency>
 ~~~
 
-2. 注入需要使用的插件
+2. 注入需要使用的插件（需要哪个注入哪个，不需要的注释掉即可）
 
 ~~~ java
 @Configuration
 public class JdbcPlusConfig {
 
     /**
-     * PaginationInterceptor是内置的分页插件（分页插件一定要注入在TenantLineHandler之后，可以通过Order来控制顺序）
-     */
-    @Bean
-    @Order(9)
-    public IInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
-    }
-
-    /**
-     * TenantLineHandler是内置的多租户插件插件
+     * TenantLineInterceptor是内置的多租户插件
      */
     @Bean
     @Order(1)
@@ -76,8 +85,81 @@ public class JdbcPlusConfig {
             }
         });
     }
+
+    /**
+     * DynamicTableNameInterceptor是内置的动态表名插件
+     */
+    @Bean
+    @Order(2)
+    public IInterceptor dynamicTableNameInterceptor() {
+        return new DynamicTableNameInterceptor(new TableNameHandler() {
+            @Override
+            public String dynamicTableName(String sql, String tableName) {
+                if ("test_log".equals(tableName)) {
+                    return tableName + "_" + LocalDateTime.now().getYear();
+                }
+                return tableName;
+            }
+        });
+    }
+
+    /**
+     * PaginationInterceptor是内置的分页插件（分页插件一般情况放置最后）
+     */
+    @Bean
+    @Order(9)
+    public IInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }
+
+    /**
+     * 自定义插件注入，注入位置按实际情况
+     */
+    @Bean
+    @Order(0)
+    public IInterceptor myStatInterceptor() {
+        return new MyStatInterceptor();
+    }
 }
 ~~~
+
+3. 正常使用JdbcTemplate执行SQL语句，代码零入侵，使用体验超棒
+
+~~~ java
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    public void insert() {
+        this.jdbcTemplate.update("insert into test_user(id,name) values('1','wangwu')");
+        //最终执行SQL：insert into test_user(id,name,tenant_id) values('1','wangwu','test_tenant_1')
+    }
+
+    public void delete() {
+        this.jdbcTemplate.update("delete from test_user where id='1'");
+        //最终执行SQL：delete from test_user where id='1' and tenant_id='test_tenant_1'
+    }
+
+    public void update() {
+        this.jdbcTemplate.update("update test_user set name='lisi' where id='1'");
+        //最终执行SQL：update test_user set name='lisi' where id='1' and tenant_id='test_tenant_1'
+    }
+
+    public List<Map<String, Object>> query() {
+        return this.jdbcTemplate.queryForList("select * from test_user");
+        //最终执行SQL：select * from test_user where tenant_id='test_tenant_1'
+    }
+
+    public PageInfo<Map<String, Object>> page1() {
+        PageHelper.startPage(1, 2);
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");
+        //最终执行SQL：select * from test_user LIMIT 0，2
+        PageInfo<Map<String, Object>> page = new PageInfo<>(list);
+        //PageInfo对象包含了分页信息（总行数等）
+        return page;
+    }
+~~~
+
+
 
 
 
@@ -89,7 +171,7 @@ public class JdbcPlusConfig {
 
 ~~~ java
     /**
-     * TenantLineHandler是内置的多租户插件插件
+     * TenantLineInterceptor是内置的多租户插件插件
      */
     @Bean
     @Order(1)
@@ -126,9 +208,6 @@ public class JdbcPlusConfig {
 2. service层执行SQL时自动添加租户字段
 
 ~~~ java
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
     public void insert() {
         this.jdbcTemplate.update("insert into test_user(id,name) values('1','wangwu')");
         //最终执行SQL：insert into test_user(id,name,tenant_id) values('1','wangwu','test_tenant_1')
@@ -160,7 +239,7 @@ public class JdbcPlusConfig {
 
 ~~~ java
     /**
-     * PaginationInterceptor是内置的分页插件（分页插件一定要注入在TenantLineHandler之后，可以通过Order来控制顺序）
+     * PaginationInterceptor是内置的分页插件（分页插件一般情况放置最后）
      */
     @Bean
     @Order(9)
@@ -172,20 +251,21 @@ public class JdbcPlusConfig {
 2. service层执行SQL时自动对SQL进行分页查询
 
 ~~~ java
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
     public PageInfo<Map<String, Object>> page1() {
         PageHelper.startPage(1, 2);
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");//最终执行SQL：select * from test_user LIMIT 0，2
-        PageInfo<Map<String, Object>> page = new PageInfo<>(list);//PageInfo对象包含了分页信息（总行数等）
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");
+        //最终执行SQL：select * from test_user LIMIT 0，2
+        PageInfo<Map<String, Object>> page = new PageInfo<>(list);
+        //PageInfo对象包含了分页信息（总行数等）
         return page;
     }
 
     public PageInfo<Map<String, Object>> page2() {
         PageHelper.startPage(2, 2);
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");//最终执行SQL：select * from test_user LIMIT 2，2
-        PageInfo<Map<String, Object>> page = new PageInfo<>(list);//PageInfo对象包含了分页信息（总行数等）
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");
+        //最终执行SQL：select * from test_user LIMIT 2，2
+        PageInfo<Map<String, Object>> page = new PageInfo<>(list);
+        //PageInfo对象包含了分页信息（总行数等）
         return page;
     }
 ~~~
@@ -193,6 +273,40 @@ public class JdbcPlusConfig {
 3. 自定义分页
 
 当插件不支持的数据库分页，可以通过`PageHelper.registerDialectAlias(String alias, Class clazz) `注册一个自己分页实现类即可，也可以覆盖已支持的数据库分页。
+
+
+
+# 动态表名插件
+
+1. 注入分页插件
+
+~~~ java
+    /**
+     * DynamicTableNameInterceptor是内置的动态表名插件
+     */
+    @Bean
+    @Order(2)
+    public IInterceptor dynamicTableNameInterceptor() {
+        return new DynamicTableNameInterceptor(new TableNameHandler() {
+            @Override
+            public String dynamicTableName(String sql, String tableName) {
+                if ("test_log".equals(tableName)) {
+                    return tableName + "_" + LocalDateTime.now().getYear();
+                }
+                return tableName;
+            }
+        });
+    }
+~~~
+
+2. service层执行SQL时自动对SQL进行分页查询
+
+~~~ java
+    public List<Map<String, Object>> getTestLogList() {
+        return this.jdbcTemplate.queryForList("select * from test_log");
+        //最终执行SQL：select * from test_log_2023
+    }
+~~~
 
 
 
@@ -225,10 +339,12 @@ public class MyStatInterceptor implements IInterceptor {
      */
     @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
-        log.info("原始SQL：{}", methodInfo.getSql());
-        log.info("入参：{}", Arrays.toString(methodInfo.getArgs()));
         log.info("执行SQL开始时间：{}", LocalDateTime.now());
-        methodInfo.getUserAttributes().put("startTime", LocalDateTime.now());
+        log.info("原始SQL：{}", Arrays.toString(methodInfo.getBatchSql()));
+        log.info("调用方法名称：{}", methodInfo.getName());
+        log.info("调用方法入参：{}", Arrays.toString(methodInfo.getArgs()));
+
+        methodInfo.putUserAttribute("startTime", LocalDateTime.now());
     }
 
     /**
@@ -240,7 +356,7 @@ public class MyStatInterceptor implements IInterceptor {
     @Override
     public Object beforeFinish(Object result, final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
         log.info("执行SQL结束时间：{}", LocalDateTime.now());
-        LocalDateTime startTime = (LocalDateTime) methodInfo.getUserAttributes().get("startTime");
+        LocalDateTime startTime = (LocalDateTime) methodInfo.getUserAttribute("startTime");
         log.info("执行SQL耗时：{}毫秒", Duration.between(startTime, LocalDateTime.now()).toMillis());
         return result;
     }
@@ -273,6 +389,10 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 
 
 # ★ 鸣谢 ★
+
+
+
+欢迎各路好汉一起来参与完善 [jdbc-plus](https://github.com/baomidou/mybatis-plus)，感兴趣的可以在github点个 ⭐ ，有任何问题和建议欢迎提交 Issue ！
 
 
 

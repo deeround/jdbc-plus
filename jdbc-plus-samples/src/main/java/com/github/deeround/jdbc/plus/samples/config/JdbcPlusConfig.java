@@ -22,15 +22,6 @@ import java.time.LocalDateTime;
 public class JdbcPlusConfig {
 
     /**
-     * PaginationInterceptor是内置的分页插件（分页插件一定要注入在TenantLineHandler之后，可以通过Order来控制顺序）
-     */
-    @Bean
-    @Order(9)
-    public IInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
-    }
-
-    /**
      * TenantLineInterceptor是内置的多租户插件
      */
     @Bean
@@ -79,6 +70,15 @@ public class JdbcPlusConfig {
                 return tableName;
             }
         });
+    }
+
+    /**
+     * PaginationInterceptor是内置的分页插件（分页插件一般情况放置最后）
+     */
+    @Bean
+    @Order(9)
+    public IInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
     }
 
     /**

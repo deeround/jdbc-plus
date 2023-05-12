@@ -82,6 +82,7 @@ public class JdbcTemplateTestService {
 
     public List<Map<String, Object>> getTestLogList() {
         return this.jdbcTemplate.queryForList("select * from test_log");
+        //最终执行SQL：select * from test_log_2023
     }
 
 }
