@@ -21,7 +21,7 @@ public class JdbcTemplateTestService {
 
     public PageInfo<Map<String, Object>> page1() {
         PageHelper.startPage(1, 2);
-        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user");
+        List<Map<String, Object>> list = this.jdbcTemplate.queryForList("select * from test_user where id=?", new Object[]{"1"});
         //最终执行SQL：select * from test_user LIMIT 0，2
         PageInfo<Map<String, Object>> page = new PageInfo<>(list);
         //PageInfo对象包含了分页信息（总行数等）

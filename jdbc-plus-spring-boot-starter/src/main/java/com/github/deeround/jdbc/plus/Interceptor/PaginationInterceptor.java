@@ -36,7 +36,7 @@ public class PaginationInterceptor implements IInterceptor {
 
             //查询汇总
             if (localPage.isCount()) {
-                Object cnt = jdbcTemplate.queryForMap(dialect.getCountSql(sql)).get("PG_COUNT");
+                Object cnt = jdbcTemplate.queryForMap(dialect.getCountSql(sql), methodInfo.getParameters()).get("PG_COUNT");
                 localPage.setTotal(Long.parseLong(cnt.toString()));
             }
 

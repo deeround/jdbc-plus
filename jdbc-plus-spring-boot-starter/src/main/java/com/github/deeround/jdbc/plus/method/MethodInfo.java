@@ -23,6 +23,10 @@ public class MethodInfo {
 
     protected boolean firstParameterIsBatchSql;
 
+    protected boolean secondParameterIsArgs;
+
+    protected boolean secondParameterIsBatchArgs;
+
     protected boolean returnIsList;
 
     public MethodInfo(Method method) {
@@ -42,6 +46,11 @@ public class MethodInfo {
                 } else if (this.name.equals("batchUpdate") && this.parameterTypes.length == 1 && this.parameterTypes[0].isArray()) {
                     this.firstParameterIsSql = true;
                     this.firstParameterIsBatchSql = true;
+                }
+            }
+            if (this.parameterTypes.length > 1 && this.parameterTypes[1] != null) {
+                if (this.parameterTypes[1].isArray()) {
+                    this.secondParameterIsArgs = true;
                 }
             }
         }
@@ -91,6 +100,14 @@ public class MethodInfo {
 
     public boolean isFirstParameterIsBatchSql() {
         return this.firstParameterIsBatchSql;
+    }
+
+    public boolean isSecondParameterIsArgs() {
+        return this.secondParameterIsArgs;
+    }
+
+    public boolean isSecondParameterIsBatchArgs() {
+        return this.secondParameterIsBatchArgs;
     }
 
     public boolean isReturnIsList() {

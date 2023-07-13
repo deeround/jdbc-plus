@@ -2,6 +2,7 @@ package com.github.deeround.jdbc.plus.method;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +14,10 @@ public class MethodInvocationInfo extends MethodInfo {
     private String sql;
 
     private String[] batchSql;
+
+    private Object[] parameters;
+
+    private List<Object[]> batchParameters;
 
     private Object[] args;
 
@@ -27,6 +32,9 @@ public class MethodInvocationInfo extends MethodInfo {
             } else {
                 this.batchSql = new String[]{args[0].toString()};
             }
+        }
+        if (this.isSecondParameterIsArgs()) {
+            this.parameters = (Object[]) args[1];
         }
     }
 
@@ -61,6 +69,14 @@ public class MethodInvocationInfo extends MethodInfo {
 
     public void setBatchSql(String[] batchSql) {
         this.batchSql = batchSql;
+    }
+
+    public Object[] getParameters() {
+        return this.parameters;
+    }
+
+    public List<Object[]> getBatchParameters() {
+        return this.batchParameters;
     }
 
     public void setArgs(Object[] args) {
