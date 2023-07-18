@@ -41,7 +41,12 @@ public class DynamicTableNameInterceptor implements IInterceptor {
 
     @Override
     public boolean supportMethod(MethodInvocationInfo methodInfo) {
-        if (methodInfo.isFirstParameterIsSql() && (MethodType.UPDATE.equals(methodInfo.getType()) || MethodType.QUERY.equals(methodInfo.getType()))) {
+
+        if (!methodInfo.isSupport()) {
+            return false;
+        }
+
+        if (MethodType.UPDATE.equals(methodInfo.getType()) || MethodType.QUERY.equals(methodInfo.getType())) {
             return true;
         }
         return false;
@@ -49,8 +54,10 @@ public class DynamicTableNameInterceptor implements IInterceptor {
 
     @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
-        for (int i = 0; i < methodInfo.getBatchSql().length; i++) {
-            methodInfo.getBatchSql()[i] = this.changeTable(methodInfo.getBatchSql()[i]);
+        if (methodInfo.getActionInfo() != null && methodInfo.getActionInfo().getBatchSql() != null) {
+            for (int i = 0; i < methodInfo.getActionInfo().getBatchSql().length; i++) {
+                methodInfo.resolveSql(i, this.changeTable(methodInfo.getActionInfo().getBatchSql()[i]));
+            }
         }
     }
 

@@ -24,6 +24,7 @@ import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -37,58 +38,33 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        log.debug("before prepare ......");
-
         ReflectiveMethodInvocation methodInvocation = (ReflectiveMethodInvocation) invocation;
 
         Object[] args = methodInvocation.getArguments();
-        log.debug("==========origin args start==========");
-        for (Object arg : args) {
-            log.debug("{}", arg);
-        }
-        log.debug("==========origin args end============");
-
         Method method = methodInvocation.getMethod();
         JdbcTemplate jdbcTemplate = (JdbcTemplate) methodInvocation.getThis();
-        log.debug("method==>{}", method);
 
         final MethodInvocationInfo methodInfo = new MethodInvocationInfo(args, method);
+        log.debug("method==>name:{},actionType:{}", methodInfo.getName(), methodInfo.getActionInfo().getActionType());
+        log.debug("origin sql==>{}", Arrays.toString(methodInfo.getActionInfo().getBatchSql()));
+        log.debug("origin parameters==>{}", this.toStr(methodInfo.getActionInfo().getBatchParameter()));
 
-        //逻辑处理
+        //逻辑处理（核心方法：主要处理SQL和SQL参数）
         if (this.interceptors != null && this.interceptors.size() > 0) {
             for (IInterceptor interceptor : this.interceptors) {
                 if (interceptor.supportMethod(methodInfo)) {
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare start==========");
                     interceptor.beforePrepare(methodInfo, jdbcTemplate);
-
-                    //插件允许修改原始入参，所以这里将入参回写
+                    //插件允许修改原始SQL以及入参
                     if (methodInfo.getArgs() != null && methodInfo.getArgs().length > 0) {
-                        //将SQL写入到第一个入参
-                        if (methodInfo.getSql() != null && methodInfo.getSql().length() > 0 && methodInfo.isFirstParameterIsSql()) {
-                            if (methodInfo.isFirstParameterIsBatchSql()) {
-                                methodInfo.getArgs()[0] = methodInfo.getBatchSql();
-                            } else {
-                                methodInfo.getArgs()[0] = methodInfo.getSql();
-                            }
-                        }
-                        //将参数回写
+                        //回写参数
                         methodInvocation.setArguments(methodInfo.getArgs());
                     }
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare end============");
-                } else {
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor prepare unsupported============");
                 }
             }
         }
+        log.debug("finish sql==>{}", Arrays.toString(methodInfo.getActionInfo().getBatchSql()));
+        log.debug("finish parameters==>{}", this.toStr(methodInfo.getActionInfo().getBatchParameter()));
 
-
-        log.debug("==========finish args start==========");
-        for (Object arg : methodInfo.getArgs()) {
-            log.debug("{}", arg);
-        }
-        log.debug("==========finish args end============");
-
-        log.debug("finish prepare ......");
 
         Object result = methodInvocation.proceed();
         log.debug("origin result==>{}", result);
@@ -98,16 +74,27 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
             for (int i = this.interceptors.size() - 1; i >= 0; i--) {
                 IInterceptor interceptor = this.interceptors.get(i);
                 if (interceptor.supportMethod(methodInfo)) {
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor finish start==========");
                     result = interceptor.beforeFinish(result, methodInfo, jdbcTemplate);
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor finish end============");
-                } else {
-                    log.debug("==========" + interceptor.getClass().getName() + " interceptor finish unsupported============");
                 }
             }
         }
         log.debug("finish result==>{}", result);
 
         return result;
+    }
+
+    private String toStr(List<Object[]> list) {
+        if (list == null) {
+            return null;
+        }
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (int i = 0; i < list.size(); i++) {
+            str.append(Arrays.toString(list.get(i)));
+            if (i < list.size() - 1) {
+                str.append(",");
+            }
+        }
+        return str.append("]").toString();
     }
 }

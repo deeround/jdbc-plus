@@ -52,7 +52,12 @@ public class TenantLineInterceptor extends BaseMultiTableInterceptor implements 
 
     @Override
     public boolean supportMethod(MethodInvocationInfo methodInfo) {
-        if (methodInfo.isFirstParameterIsSql() && (MethodType.UPDATE.equals(methodInfo.getType()) || MethodType.QUERY.equals(methodInfo.getType()))) {
+
+        if (!methodInfo.isSupport()) {
+            return false;
+        }
+
+        if (MethodType.UPDATE.equals(methodInfo.getType()) || MethodType.QUERY.equals(methodInfo.getType())) {
             return true;
         }
         return false;
@@ -60,8 +65,10 @@ public class TenantLineInterceptor extends BaseMultiTableInterceptor implements 
 
     @Override
     public void beforePrepare(final MethodInvocationInfo methodInfo, JdbcTemplate jdbcTemplate) {
-        for (int i = 0; i < methodInfo.getBatchSql().length; i++) {
-            methodInfo.getBatchSql()[i] = this.parserMulti(methodInfo.getBatchSql()[i], null);
+        if (methodInfo.getActionInfo() != null && methodInfo.getActionInfo().getBatchSql() != null) {
+            for (int i = 0; i < methodInfo.getActionInfo().getBatchSql().length; i++) {
+                methodInfo.resolveSql(i, this.parserMulti(methodInfo.getActionInfo().getBatchSql()[i], null));
+            }
         }
     }
 

@@ -33,7 +33,7 @@ public class JdbcPlusConfig {
              */
             @Override
             public Expression getTenantId() {
-                String currentTenantId = "test_tenant_1";//可以从请求上下文中获取（cookie、session、header等）
+                String currentTenantId = "test_tenant_4";//可以从请求上下文中获取（cookie、session、header等）
                 return new StringValue(currentTenantId);
             }
 
@@ -84,7 +84,7 @@ public class JdbcPlusConfig {
     /**
      * MyStatInterceptor是自定义扩展的SQL监控插件（注入位置按实际情况）
      */
-    @Bean
+    //@Bean
     @Order(0)
     public IInterceptor myStatInterceptor() {
         return new MyStatInterceptor();

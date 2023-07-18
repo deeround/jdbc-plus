@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +111,18 @@ public class Tests {
         List<TestUser> list2 = this.testUserService.getListByCondition("3");
         System.out.println(list1);
         System.out.println(list2);
+    }
+
+    @Test
+    void testMethod() throws Exception {
+        Class<?> clazz = JdbcTemplate.class;
+        Method query1 = clazz.getMethod("query", String.class, RowMapper.class);
+        Method query2 = clazz.getMethod("query", String.class, RowMapper.class);
+        Method query3 = clazz.getMethod("query", String.class, RowMapper.class);
+
+        System.out.println(query1.hashCode());
+        System.out.println(query2.hashCode());
+        System.out.println(query3.hashCode());
     }
 
     //======================jdbc-plus和mybatis-plus使用对比==============================

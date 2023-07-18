@@ -1,7 +1,6 @@
 package com.github.deeround.jdbc.plus.method;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * @author wanghao 913351190@qq.com
@@ -9,77 +8,16 @@ import java.util.List;
  */
 public class MethodInfo {
 
-    protected Method method;
+    private Method method;
 
-    protected MethodType type;
+    private String name;
 
-    protected String name;
+    private Class<?>[] parameterTypes;
 
-    protected Class<?>[] parameterTypes;
-
-    protected Class<?> returnType;
-
-    protected boolean firstParameterIsSql;
-
-    protected boolean firstParameterIsBatchSql;
-
-    protected boolean secondParameterIsArgs;
-
-    protected boolean secondParameterIsBatchArgs;
-
-    protected boolean returnIsList;
-
-    public MethodInfo(Method method) {
-
-        this.method = method;
-        this.name = method.getName();
-        this.type = this.getMethodType();
-
-        this.parameterTypes = method.getParameterTypes();
-        this.returnType = method.getReturnType();
-
-
-        if (this.parameterTypes != null && this.parameterTypes.length > 0) {
-            if (this.parameterTypes[0] != null) {
-                if (String.class.isAssignableFrom(this.parameterTypes[0])) {
-                    this.firstParameterIsSql = true;
-                } else if (this.name.equals("batchUpdate") && this.parameterTypes.length == 1 && this.parameterTypes[0].isArray()) {
-                    this.firstParameterIsSql = true;
-                    this.firstParameterIsBatchSql = true;
-                }
-            }
-            if (this.parameterTypes.length > 1 && this.parameterTypes[1] != null) {
-                if (this.parameterTypes[1].isArray()) {
-                    this.secondParameterIsArgs = true;
-                }
-            }
-        }
-
-        if (this.returnType != null) {
-            this.returnIsList = List.class.isAssignableFrom(this.returnType);
-        }
-    }
-
-    protected MethodType getMethodType() {
-        if (this.name != null || this.name.length() > 0) {
-            if (this.name.equals("batchUpdate") || this.name.equals("update")) {
-                return MethodType.UPDATE;
-            } else if (this.name.equals("query") || this.name.equals("queryForList") || this.name.equals("queryForMap") || this.name.equals("queryForObject") || this.name.equals("queryForRowSet") || this.name.equals("queryForStream")) {
-                return MethodType.QUERY;
-            } else if (this.name.equals("execute")) {
-                return MethodType.EXECUTE;
-            }
-        }
-        return MethodType.UNKNOWN;
-    }
-
+    private Class<?> returnType;
 
     public Method getMethod() {
         return this.method;
-    }
-
-    public MethodType getType() {
-        return this.type;
     }
 
     public String getName() {
@@ -94,23 +32,11 @@ public class MethodInfo {
         return this.returnType;
     }
 
-    public boolean isFirstParameterIsSql() {
-        return this.firstParameterIsSql;
+    public MethodInfo(Method method) {
+        this.method = method;
+        this.name = method.getName();
+        this.parameterTypes = method.getParameterTypes();
+        this.returnType = method.getReturnType();
     }
 
-    public boolean isFirstParameterIsBatchSql() {
-        return this.firstParameterIsBatchSql;
-    }
-
-    public boolean isSecondParameterIsArgs() {
-        return this.secondParameterIsArgs;
-    }
-
-    public boolean isSecondParameterIsBatchArgs() {
-        return this.secondParameterIsBatchArgs;
-    }
-
-    public boolean isReturnIsList() {
-        return this.returnIsList;
-    }
 }

@@ -356,6 +356,17 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL结束时间：2023-04-23T16
 c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 ~~~
 
+
+
+# JdbcTemplate支持
+
+- 所有batchUpdate、update、query、queryForList、queryForMap、queryForObject都支持（但是方法第一个入参必须是sql语句的才支持）
+- 所有query开头的方法都支持分页插件，但是只有返回类型是List<?>的才支持查询汇总信息
+
+
+
+
+
 # ★ 鸣谢 ★
 
 欢迎各路好汉一起来参与完善 [jdbc-plus](https://github.com/baomidou/mybatis-plus)，感兴趣的可以在github点个 ⭐ ，有任何问题和建议欢迎提交 Issue ！
