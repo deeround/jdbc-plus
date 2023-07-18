@@ -14,6 +14,7 @@ import java.util.List;
 public class MethodActionInfo {
 
     private MethodActionType actionType = MethodActionType.UNKNOWN;
+    private boolean isSupport = false;
 
     //以下是针对入参-SQL
 
@@ -21,7 +22,7 @@ public class MethodActionInfo {
     /**
      * SQL语句
      */
-    private String sql;
+//    private String sql;
     /**
      * 批量SQL语句
      */
@@ -45,7 +46,7 @@ public class MethodActionInfo {
     /**
      * 入参Object[]
      */
-    private Object[] parameter;
+//    private Object[] parameter;
     /**
      * 批量入参List<Object[]>
      */
@@ -104,6 +105,7 @@ public class MethodActionInfo {
 
     public MethodActionInfo(boolean parameterIsPss, int parameterIndex, int parameterTypeIndex,
                             boolean hasReturn, boolean returnIsList) {
+        this.isSupport = true;
         this.parameterIsPss = parameterIsPss;
         this.parameterIndex = parameterIndex;
         if (parameterIndex >= 0) {
@@ -131,5 +133,9 @@ public class MethodActionInfo {
 
         this.sqlIsBatch = sqlIsBatch;
         this.parameterIsBatch = parameterIsBatch;
+    }
+
+    public MethodActionInfo() {
+
     }
 }

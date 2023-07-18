@@ -16,8 +16,6 @@ public class MethodInvocationInfo extends MethodInfo {
 
     private MethodType type;
 
-    private boolean isSupport;
-
     private MethodActionInfo actionInfo;
 
     private final Map<String, Object> userAttributes = new HashMap<>(0);
@@ -27,7 +25,6 @@ public class MethodInvocationInfo extends MethodInfo {
         this.args = args;
 
         this.type = MethodType.UNKNOWN;
-        this.isSupport = false;
 
         this.resolveMethod();
 
@@ -42,7 +39,7 @@ public class MethodInvocationInfo extends MethodInfo {
     }
 
     public boolean isSupport() {
-        return this.isSupport;
+        return this.actionInfo != null && this.actionInfo.isSupport();
     }
 
     public MethodActionInfo getActionInfo() {
@@ -145,9 +142,6 @@ public class MethodInvocationInfo extends MethodInfo {
             this.type = MethodType.QUERY;
         }
         this.actionInfo = MethodActionRegister.getMethodActionInfo(this.getMethod(), this.args);
-        if (this.actionInfo != null) {
-            this.isSupport = true;
-        }
     }
 
 }

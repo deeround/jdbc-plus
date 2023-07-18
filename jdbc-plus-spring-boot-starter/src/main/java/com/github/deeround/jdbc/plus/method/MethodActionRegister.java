@@ -152,7 +152,7 @@ public class MethodActionRegister {
             return actionInfo;
 
         } else {
-            return null;
+            return new MethodActionInfo();
         }
     }
 
