@@ -360,11 +360,12 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 
 # JdbcTemplate支持
 
-- 所有batchUpdate、update、query、queryForList、queryForMap、queryForObject都支持（但是方法第一个入参必须是sql语句的才支持）
-- 所有query开头的方法都支持分页插件，但是只有返回类型是List<?>的才支持查询汇总信息
+- 所有batchUpdate、update、query、queryForList、queryForMap、queryForObject、queryForRowSet、queryForStream都支持（但是方法第一个入参必须是sql语句的才支持）
+- 所有query开头的方法都支持分页插件（但是只有返回类型是List<?>的才支持查询汇总信息）
 - 如果有其他方法需要支持的，可以联系作者
+- 也可以手动调用`MethodActionRegister.register(Class<JdbcTemplate> clazz, MethodActionInfo actionInfo, String name, Class<?>... parameterTypes)`方法进行注册使jdbc-plus支持该方法
 
-支持的方法明细：
+支持的方法明细（里面注释内容就是支持的JdbcTemlate方法）：
 
 ~~~ java
     /**
@@ -582,6 +583,37 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
      * T queryForObject(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
      */
     QUERYFOROBJECT_SQL_ROWMAPPER_ARGS,
+
+/**
+     * SqlRowSet queryForRowSet(String sql)
+     */
+    QUERYFORROWSET_SQL,
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, @Nullable Object... args)
+     */
+    QUERYFORROWSET_SQL_ARGS,
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes)
+     */
+    QUERYFORROWSET_SQL_ARGS_ARGTYPES,
+
+
+    /**
+     * Stream<T> queryForStream(String sql, @Nullable PreparedStatementSetter pss, RowMapper<T> rowMapper)
+     */
+    QUERYFORSTREAM_SQL_PSS_ROWMAPPER,
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper)
+     */
+    QUERYFORSTREAM_SQL_ROWMAPPER,
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+     */
+    QUERYFORSTREAM_SQL_ROWMAPPER_ARGS,
 ~~~
 
 

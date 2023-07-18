@@ -233,4 +233,36 @@ public enum MethodActionType {
      */
     QUERYFOROBJECT_SQL_ROWMAPPER_ARGS,
 
+
+    /**
+     * SqlRowSet queryForRowSet(String sql)
+     */
+    QUERYFORROWSET_SQL,
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, @Nullable Object... args)
+     */
+    QUERYFORROWSET_SQL_ARGS,
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes)
+     */
+    QUERYFORROWSET_SQL_ARGS_ARGTYPES,
+
+
+    /**
+     * Stream<T> queryForStream(String sql, @Nullable PreparedStatementSetter pss, RowMapper<T> rowMapper)
+     */
+    QUERYFORSTREAM_SQL_PSS_ROWMAPPER,
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper)
+     */
+    QUERYFORSTREAM_SQL_ROWMAPPER,
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+     */
+    QUERYFORSTREAM_SQL_ROWMAPPER_ARGS,
+
 }

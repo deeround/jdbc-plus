@@ -113,6 +113,23 @@ public class MethodActionRegister {
         //T queryForObject(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
         register(clazz, new MethodActionInfo(false, 2, -1, true, false), "queryForObject", String.class, RowMapper.class, Object[].class);
 
+
+        //SqlRowSet queryForRowSet(String sql)
+        register(clazz, new MethodActionInfo(false, -1, -1, true, false), "queryForRowSet", String.class);
+        //SqlRowSet queryForRowSet(String sql, @Nullable Object... args)
+        register(clazz, new MethodActionInfo(false, 1, -1, true, false), "queryForRowSet", String.class, Object[].class);
+        //SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes)
+        register(clazz, new MethodActionInfo(false, 1, 2, true, false), "queryForRowSet", String.class, Object[].class, int[].class);
+
+        
+        //Stream<T> queryForStream(String sql, @Nullable PreparedStatementSetter pss, RowMapper<T> rowMapper)
+        register(clazz, new MethodActionInfo(true, 1, -1, true, false), "queryForStream", String.class, PreparedStatementSetter.class, RowMapper.class);
+        //Stream<T> queryForStream(String sql, RowMapper<T> rowMapper)
+        register(clazz, new MethodActionInfo(false, -1, -1, true, false), "queryForStream", String.class, RowMapper.class);
+        //Stream<T> queryForStream(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+        register(clazz, new MethodActionInfo(false, 2, -1, true, false), "queryForStream", String.class, RowMapper.class, Object[].class);
+
+
     }
 
     public static MethodActionInfo getMethodActionInfo(Method method, Object[] args) {

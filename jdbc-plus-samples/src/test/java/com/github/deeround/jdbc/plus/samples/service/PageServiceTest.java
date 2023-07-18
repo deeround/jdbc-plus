@@ -40,6 +40,7 @@ public class PageServiceTest {
         this.testAllService.QUERY_SQL_ROWMAPPER();
         this.testAllService.QUERY_SQL_ROWMAPPER_ARGS();
         this.testAllService.QUERYFORLIST_SQL();
+        this.testAllService.QUERYFORSTREAM_SQL_ROWMAPPER_ARGS();
     }
 
 }

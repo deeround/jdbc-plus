@@ -25,6 +25,7 @@
 package com.github.deeround.jdbc.plus.Interceptor.pagination;
 
 import java.io.Closeable;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import java.util.List;
  * @version 3.6.0
  * 项目地址 : http://git.oschina.net/free/Mybatis_PageHelper
  */
-public class Page<E> extends ArrayList<E> implements Closeable {
+public class Page<E> extends ArrayList<E> implements Serializable, Closeable {
     private static final long serialVersionUID = 1L;
 
     /**

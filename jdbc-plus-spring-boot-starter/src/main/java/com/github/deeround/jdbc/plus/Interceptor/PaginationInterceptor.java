@@ -98,10 +98,14 @@ public class PaginationInterceptor implements IInterceptor {
         }
 
         try {
-            if (result != null && methodInfo.getActionInfo().isReturnIsList()) {
-                localPage.addAll((Collection<?>) result);
+            if (methodInfo.getActionInfo().isReturnIsList()) {
+                if (result != null) {
+                    localPage.addAll((Collection<?>) result);
+                }
+                return localPage;
+            } else {
+                return result;
             }
-            return localPage;
         } finally {
             PageHelper.clearPage();
         }

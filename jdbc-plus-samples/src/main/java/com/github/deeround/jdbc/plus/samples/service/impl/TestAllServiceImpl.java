@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @author wanghao 913351190@qq.com
@@ -606,5 +607,61 @@ public class TestAllServiceImpl implements TestAllService {
      */
     @Override
     public void QUERYFOROBJECT_SQL_ROWMAPPER_ARGS() {
+    }
+
+    /**
+     * SqlRowSet queryForRowSet(String sql)
+     */
+    @Override
+    public void QUERYFORROWSET_SQL() {
+    }
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, @Nullable Object... args)
+     */
+    @Override
+    public void QUERYFORROWSET_SQL_ARGS() {
+    }
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes)
+     */
+    @Override
+    public void QUERYFORROWSET_SQL_ARGS_ARGTYPES() {
+    }
+
+
+    /**
+     * Stream<T> queryForStream(String sql, @Nullable PreparedStatementSetter pss, RowMapper<T> rowMapper)
+     */
+    @Override
+    public void QUERYFORSTREAM_SQL_PSS_ROWMAPPER() {
+    }
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper)
+     */
+    @Override
+    public void QUERYFORSTREAM_SQL_ROWMAPPER() {
+
+    }
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+     */
+    @Override
+    public void QUERYFORSTREAM_SQL_ROWMAPPER_ARGS() {
+        //分页测试
+        PageHelper.startPage(1, 5);
+
+        String sql = "select * from test_log where tenant_id=?";
+        Stream<Object> list = this.jdbcTemplate.queryForStream(sql, new RowMapper<Object>() {
+            @Override
+            public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+                log.info("rowNum==>{}", rowNum);
+                return TestAllServiceImpl.toMap(rs);
+            }
+        }, "test_tenant_4");
+
     }
 }

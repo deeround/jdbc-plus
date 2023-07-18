@@ -223,5 +223,35 @@ public interface TestAllService {
      */
     void QUERYFOROBJECT_SQL_ROWMAPPER_ARGS();
 
+    /**
+     * SqlRowSet queryForRowSet(String sql)
+     */
+    void QUERYFORROWSET_SQL();
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, @Nullable Object... args)
+     */
+    void QUERYFORROWSET_SQL_ARGS();
+
+    /**
+     * SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes)
+     */
+    void QUERYFORROWSET_SQL_ARGS_ARGTYPES();
+
+
+    /**
+     * Stream<T> queryForStream(String sql, @Nullable PreparedStatementSetter pss, RowMapper<T> rowMapper)
+     */
+    void QUERYFORSTREAM_SQL_PSS_ROWMAPPER();
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper)
+     */
+    void QUERYFORSTREAM_SQL_ROWMAPPER();
+
+    /**
+     * Stream<T> queryForStream(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+     */
+    void QUERYFORSTREAM_SQL_ROWMAPPER_ARGS();
 
 }
