@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public class MethodInvocationInfo extends MethodInfo {
 
+    private boolean isSupport;
+
     private final Object[] args;
 
     private MethodType type;
@@ -23,11 +25,10 @@ public class MethodInvocationInfo extends MethodInfo {
     public MethodInvocationInfo(final Object[] args, Method method) {
         super(method);
         this.args = args;
-
         this.type = MethodType.UNKNOWN;
+        this.isSupport = false;
 
         this.resolveMethod();
-
     }
 
     public Object[] getArgs() {
@@ -39,7 +40,7 @@ public class MethodInvocationInfo extends MethodInfo {
     }
 
     public boolean isSupport() {
-        return this.actionInfo != null && this.actionInfo.isSupport();
+        return this.isSupport;
     }
 
     public MethodActionInfo getActionInfo() {
@@ -142,6 +143,9 @@ public class MethodInvocationInfo extends MethodInfo {
             this.type = MethodType.QUERY;
         }
         this.actionInfo = MethodActionRegister.getMethodActionInfo(this.getMethod(), this.args);
+        if (this.actionInfo != null && !this.actionInfo.getActionType().equals(MethodActionType.UNKNOWN)) {
+            this.isSupport = true;
+        }
     }
 
 }

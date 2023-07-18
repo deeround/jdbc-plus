@@ -115,14 +115,6 @@ public class MethodActionRegister {
 
     }
 
-    public static MethodActionInfo getMethodActionInfo(Method method) {
-        if (Method_MAP.containsKey(method)) {
-            return Method_MAP.get(method);
-        } else {
-            return null;
-        }
-    }
-
     public static MethodActionInfo getMethodActionInfo(Method method, Object[] args) {
         if (Method_MAP.containsKey(method)) {
             MethodActionInfo actionInfo = Method_MAP.get(method);
@@ -156,7 +148,7 @@ public class MethodActionRegister {
         }
     }
 
-    static void register(Class<JdbcTemplate> clazz, MethodActionInfo actionInfo, String name, Class<?>... parameterTypes) {
+    public static void register(Class<JdbcTemplate> clazz, MethodActionInfo actionInfo, String name, Class<?>... parameterTypes) {
         try {
             Method method = clazz.getMethod(name, parameterTypes);
             Method_MAP.put(method, actionInfo);

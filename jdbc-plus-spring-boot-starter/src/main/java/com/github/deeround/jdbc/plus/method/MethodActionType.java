@@ -12,6 +12,12 @@ public enum MethodActionType {
     UNKNOWN,
 
     /**
+     * 动态方法
+     */
+    DYNAMIC,
+
+
+    /**
      * int[] batchUpdate(String sql, final BatchPreparedStatementSetter pss)
      */
     BATCHUPDATE_SQL_PSS,

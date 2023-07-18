@@ -46,7 +46,7 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
 
         final MethodInvocationInfo methodInfo = new MethodInvocationInfo(args, method);
         log.debug("method==>name:{},actionType:{}", methodInfo.getName(), methodInfo.getActionInfo().getActionType());
-        log.debug("origin sql==>{}", Arrays.toString(methodInfo.getActionInfo().getBatchSql()));
+        log.debug("origin sql==>{}", this.toStr(methodInfo.getActionInfo().getBatchSql()));
         log.debug("origin parameters==>{}", this.toStr(methodInfo.getActionInfo().getBatchParameter()));
 
         //逻辑处理（核心方法：主要处理SQL和SQL参数）
@@ -62,7 +62,7 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
                 }
             }
         }
-        log.debug("finish sql==>{}", Arrays.toString(methodInfo.getActionInfo().getBatchSql()));
+        log.debug("finish sql==>{}", this.toStr(methodInfo.getActionInfo().getBatchSql()));
         log.debug("finish parameters==>{}", this.toStr(methodInfo.getActionInfo().getBatchParameter()));
 
 
@@ -81,6 +81,13 @@ public class JdbcTemplateMethodInterceptor implements MethodInterceptor {
         log.debug("finish result==>{}", result);
 
         return result;
+    }
+
+    private String toStr(Object[] objs) {
+        if (objs == null) {
+            return null;
+        }
+        return Arrays.toString(objs);
     }
 
     private String toStr(List<Object[]> list) {

@@ -14,7 +14,6 @@ import java.util.List;
 public class MethodActionInfo {
 
     private MethodActionType actionType = MethodActionType.UNKNOWN;
-    private boolean isSupport = false;
 
     //以下是针对入参-SQL
 
@@ -105,7 +104,7 @@ public class MethodActionInfo {
 
     public MethodActionInfo(boolean parameterIsPss, int parameterIndex, int parameterTypeIndex,
                             boolean hasReturn, boolean returnIsList) {
-        this.isSupport = true;
+        this.actionType = MethodActionType.DYNAMIC;//TODO 待完善
         this.parameterIsPss = parameterIsPss;
         this.parameterIndex = parameterIndex;
         if (parameterIndex >= 0) {
@@ -136,6 +135,7 @@ public class MethodActionInfo {
     }
 
     public MethodActionInfo() {
-
+        //不支持方法时使用无参构造函数
     }
+
 }
