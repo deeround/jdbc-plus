@@ -362,6 +362,17 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 
 - 所有batchUpdate、update、query、queryForList、queryForMap、queryForObject都支持（但是方法第一个入参必须是sql语句的才支持）
 - 所有query开头的方法都支持分页插件，但是只有返回类型是List<?>的才支持查询汇总信息
+- 如果有其他方法需要支持的，可以联系作者
+
+
+
+# 联系我
+
+
+
+方式一：GitHub上提Issue。
+
+方式二：发送邮件☞913351190@qq.com
 
 
 

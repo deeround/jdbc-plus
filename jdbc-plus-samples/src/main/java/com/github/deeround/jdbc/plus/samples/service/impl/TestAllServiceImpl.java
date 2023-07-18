@@ -2,6 +2,7 @@ package com.github.deeround.jdbc.plus.samples.service.impl;
 
 import com.github.deeround.jdbc.plus.Interceptor.pagination.PageHelper;
 import com.github.deeround.jdbc.plus.Interceptor.pagination.PageInfo;
+import com.github.deeround.jdbc.plus.samples.domain.TestLog;
 import com.github.deeround.jdbc.plus.samples.service.TestAllService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -482,6 +483,8 @@ public class TestAllServiceImpl implements TestAllService {
      */
     @Override
     public void QUERYFORLIST_SQL() {
+        String sql = "select id,name,tenant_id as tenantId from test_log where tenant_id=?";
+        List bean = this.jdbcTemplate.query(sql, new BeanPropertyRowMapper<TestLog>(TestLog.class), "test_tenant_4");
     }
 
     /**
