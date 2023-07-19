@@ -1,6 +1,6 @@
 # 🚀 jdbc-plus简介
 
-🚀 jdbc-plus是一款基于JdbcTemplate增强工具包，基于JdbcTemplate已实现分页、多租户、动态表名等插件，可与mybatis、mybatis-plus等混合使用，还可以十分简单的扩展自定义插件。项目开源地址：https://github.com/baomidou/mybatis-plus
+🚀 jdbc-plus是一款基于JdbcTemplate增强工具包，基于JdbcTemplate已实现分页、多租户、动态表名等插件，可与mybatis、mybatis-plus等混合使用，还可以十分简单的扩展自定义插件。
 
 ## 🍅  **特性**
 
@@ -20,7 +20,7 @@
 
 ##  **🏠**  **项目开源地址**
 
-[https://github.com/baomidou/mybatis-plus](https://github.com/baomidou/mybatis-plus)
+https://github.com/deeround/jdbc-plus
 
 # 快速开始
 
@@ -632,9 +632,9 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 
 
 
-# ★ 鸣谢 ★
+# 鸣谢
 
-欢迎各路好汉一起来参与完善 [jdbc-plus](https://github.com/baomidou/mybatis-plus)，感兴趣的可以在github点个 ⭐ ，有任何问题和建议欢迎提交 Issue ！
+欢迎各路好汉一起来参与完善 jdbc-plus，感兴趣的可以在github点个 ⭐ ，有任何问题和建议欢迎提交 Issue ！
 
 感谢以下开源项目：
 
