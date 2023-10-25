@@ -1,3 +1,7 @@
+# **仓库已全部迁移到Gitee**
+# Gitee地址：https://gitee.com/deeround/jdbc-plus
+
+
 # 🚀 jdbc-plus简介
 
 🚀 jdbc-plus是一款基于JdbcTemplate增强工具包，基于JdbcTemplate已实现分页、多租户、动态表名等插件，可与mybatis、mybatis-plus等混合使用，还可以十分简单的扩展自定义插件。
@@ -21,6 +25,8 @@
 ##  **🏠**  **项目开源地址**
 
 https://github.com/deeround/jdbc-plus
+
+https://gitee.com/deeround/jdbc-plus
 
 # 快速开始
 
@@ -624,9 +630,7 @@ c.g.d.j.p.s.config.MyStatInterceptor     : 执行SQL耗时：503毫秒
 
 
 
-方式一：GitHub上提Issue
-
-方式二：发送邮件☞913351190@qq.com
+方式一：Git上提Issue
 
 
 
